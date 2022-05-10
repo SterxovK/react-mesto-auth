@@ -1,4 +1,5 @@
 import React from "react";
+import { Route, Switch } from "react-router-dom";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -113,46 +114,54 @@ function App() {
   }
 
   return (
-    <CurrentUserContext.Provider value={currentUser}>
-      <div className="page">
-        <Header />
-        <Main
-          onEditAvatar={handleEditAvatarClick}
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onCardClick={handleCardClick}
-          cards={cards}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
-        />
+    <Switch>
+      <CurrentUserContext.Provider value={currentUser}>
+        <div className="page">
+          <Route path="/sign-up">
+            <Login />
+          </Route>
+          <Route path="/sign-in">
+            <Register />
+          </Route>
+          <Header />
+          <Main
+            onEditAvatar={handleEditAvatarClick}
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
+            onCardClick={handleCardClick}
+            cards={cards}
+            onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
+          />
 
-        <EditProfilePopup
-          isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-          onUpdateUser={handleUpdateUser}
-          buttonSubmitText={submitTextProfilePopup}
-        />
+          <EditProfilePopup
+            isOpen={isEditProfilePopupOpen}
+            onClose={closeAllPopups}
+            onUpdateUser={handleUpdateUser}
+            buttonSubmitText={submitTextProfilePopup}
+          />
 
-        <AddPlacePopup
-          isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}
-          onAddPlace={handleAddPlaceSubmit}
-          buttonSubmitText={submitTextAddPlacesPopup}
-        />
+          <AddPlacePopup
+            isOpen={isAddPlacePopupOpen}
+            onClose={closeAllPopups}
+            onAddPlace={handleAddPlaceSubmit}
+            buttonSubmitText={submitTextAddPlacesPopup}
+          />
 
-        <EditAvatarPopup
-          isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-          onUpdateAvatar={handleUpdateAvatar}
-        />
-        <Footer />
-        <ImagePopup
-          name="show-cards"
-          card={selectedCard}
-          onClose={closeAllPopups}
-        />
-      </div>
-    </CurrentUserContext.Provider>
+          <EditAvatarPopup
+            isOpen={isEditAvatarPopupOpen}
+            onClose={closeAllPopups}
+            onUpdateAvatar={handleUpdateAvatar}
+          />
+          <Footer />
+          <ImagePopup
+            name="show-cards"
+            card={selectedCard}
+            onClose={closeAllPopups}
+          />
+        </div>
+      </CurrentUserContext.Provider>
+    </Switch>
   );
 }
 
