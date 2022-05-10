@@ -1,0 +1,6 @@
+.card__group {
+    display: flex;
+    width: 246px;
+    justify-content: space-between;
+    margin: 25px 15px 0 21px;
+}

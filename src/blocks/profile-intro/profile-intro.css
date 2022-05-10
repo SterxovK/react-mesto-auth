@@ -1,0 +1,16 @@
+.profile-intro {
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    grid-template-rows: auto;
+    grid-column-gap: 18px;
+    grid-row-gap: 5px;
+    align-content: center;
+    padding-left: 30px;
+}
+
+@media screen and (max-width: 550px) {
+    .profile-intro {
+        padding: 26px 0 36px;
+        grid-column-gap: 10px;
+    }
+}

@@ -1,0 +1,19 @@
+.profile-intro__sabtitle {
+    margin: 0;
+    max-width: 294px;
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: 400;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+@media screen and (max-width: 880px) {
+    .profile-intro__sabtitle {
+        max-width: 189px;
+        font-size: 14px;
+        line-height: 17px;
+        margin: auto;
+    }
+}
