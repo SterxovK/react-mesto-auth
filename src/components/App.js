@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -10,6 +10,7 @@ import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import Login from "./Login";
+import Register from "./Register";
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState({});
@@ -20,6 +21,7 @@ function App() {
   const [cards, setCards] = React.useState([]);
   const [submitTextProfilePopup, setSubmitTextProfilePopup] = React.useState("Сохранить");
   const [submitTextAddPlacesPopup, setSubmitTextAddPlacesPopup] = React.useState("Сохранить");
+  const [loggedIn, setLoggedIn] = React.useState(false)
 
   React.useEffect(() => {
     api
@@ -113,53 +115,65 @@ function App() {
       console.log(error);
     }
   }
+  
+  //ОТПРАВИТЬ ПОСТ НА ДОБАВЛЕНИЕ НОВОГО ПОЛЬЗОВАТЕЛЯ
+  function handleAddUserSubmit(data) {
+    const newUser = data;
+    console.log(newUser);
+  }
 
   return (
     <Switch>
       <CurrentUserContext.Provider value={currentUser}>
         <div className="page">
-          <Route path="/sign-up">
-            <Login />
+          <Header />
+          <Route path="/regOk">
+            <Main
+              onEditAvatar={handleEditAvatarClick}
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onCardClick={handleCardClick}
+              cards={cards}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
+            />
+
+            <EditProfilePopup
+              isOpen={isEditProfilePopupOpen}
+              onClose={closeAllPopups}
+              onUpdateUser={handleUpdateUser}
+              buttonSubmitText={submitTextProfilePopup}
+            />
+
+            <AddPlacePopup
+              isOpen={isAddPlacePopupOpen}
+              onClose={closeAllPopups}
+              onAddPlace={handleAddPlaceSubmit}
+              buttonSubmitText={submitTextAddPlacesPopup}
+            />
+
+            <EditAvatarPopup
+              isOpen={isEditAvatarPopupOpen}
+              onClose={closeAllPopups}
+              onUpdateAvatar={handleUpdateAvatar}
+            />
+            <Footer />
+            <ImagePopup
+              name="show-cards"
+              card={selectedCard}
+              onClose={closeAllPopups}
+            />
           </Route>
           <Route path="/sign-in">
-            <Register />
+            <Login />
           </Route>
-          <Header />
-          <Main
-            onEditAvatar={handleEditAvatarClick}
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
-            onCardClick={handleCardClick}
-            cards={cards}
-            onCardLike={handleCardLike}
-            onCardDelete={handleCardDelete}
-          />
-
-          <EditProfilePopup
-            isOpen={isEditProfilePopupOpen}
-            onClose={closeAllPopups}
-            onUpdateUser={handleUpdateUser}
-            buttonSubmitText={submitTextProfilePopup}
-          />
-
-          <AddPlacePopup
-            isOpen={isAddPlacePopupOpen}
-            onClose={closeAllPopups}
-            onAddPlace={handleAddPlaceSubmit}
-            buttonSubmitText={submitTextAddPlacesPopup}
-          />
-
-          <EditAvatarPopup
-            isOpen={isEditAvatarPopupOpen}
-            onClose={closeAllPopups}
-            onUpdateAvatar={handleUpdateAvatar}
-          />
-          <Footer />
-          <ImagePopup
-            name="show-cards"
-            card={selectedCard}
-            onClose={closeAllPopups}
-          />
+          <Route path="/sign-up">
+            <Register onAddUser={handleAddUserSubmit} />
+          </Route>
+          <Route exact path="/">
+            //Временное решение
+            {loggedIn ? <Redirect to="/regOk" /> : <Redirect to="/sign-up" />}
+          </Route>
         </div>
       </CurrentUserContext.Provider>
     </Switch>
