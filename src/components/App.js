@@ -5,23 +5,30 @@ import Main from "./Main";
 import Footer from "./Footer";
 import ImagePopup from "./ImagePopup";
 import api from "../utils/Api";
+import * as auth from "./../utils/Auth"
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import Login from "./Login";
 import Register from "./Register";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState({});
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
+    React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
+    React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({});
   const [cards, setCards] = React.useState([]);
-  const [submitTextProfilePopup, setSubmitTextProfilePopup] = React.useState("Сохранить");
-  const [submitTextAddPlacesPopup, setSubmitTextAddPlacesPopup] = React.useState("Сохранить");
-  const [loggedIn, setLoggedIn] = React.useState(false)
+  const [submitTextProfilePopup, setSubmitTextProfilePopup] =
+    React.useState("Сохранить");
+  const [submitTextAddPlacesPopup, setSubmitTextAddPlacesPopup] =
+    React.useState("Сохранить");
+  const [isLoggedIn, setLoggedIn] = React.useState(false);
+  const [newUserInfo, setNewUserInfo] = React.useState({});
 
   React.useEffect(() => {
     api
@@ -115,68 +122,85 @@ function App() {
       console.log(error);
     }
   }
-  
+
   //ОТПРАВИТЬ ПОСТ НА ДОБАВЛЕНИЕ НОВОГО ПОЛЬЗОВАТЕЛЯ
-  function handleAddUserSubmit(data) {
-    const newUser = data;
-    console.log(newUser);
+  function handleRegister(  password, email ) {
+    console.log(password, email);
+    auth.register(password, email);
+    
+
+    //setNewUserInfo({email});
+  }
+  function handleLogin(data) {
+   
+    //setLoggedIn(true)
+  }
+  function handleSignOut() {
+    //console.log('нажал на выйти')
   }
 
+  //ПРидумать логикику текста кнопки в хедере
   return (
-    <Switch>
+    <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
-        <div className="page">
-          <Header />
-          <Route path="/regOk">
-            <Main
-              onEditAvatar={handleEditAvatarClick}
-              onEditProfile={handleEditProfileClick}
-              onAddPlace={handleAddPlaceClick}
-              onCardClick={handleCardClick}
-              cards={cards}
-              onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete}
-            />
-
-            <EditProfilePopup
-              isOpen={isEditProfilePopupOpen}
-              onClose={closeAllPopups}
-              onUpdateUser={handleUpdateUser}
-              buttonSubmitText={submitTextProfilePopup}
-            />
-
-            <AddPlacePopup
-              isOpen={isAddPlacePopupOpen}
-              onClose={closeAllPopups}
-              onAddPlace={handleAddPlaceSubmit}
-              buttonSubmitText={submitTextAddPlacesPopup}
-            />
-
-            <EditAvatarPopup
-              isOpen={isEditAvatarPopupOpen}
-              onClose={closeAllPopups}
-              onUpdateAvatar={handleUpdateAvatar}
-            />
-            <Footer />
-            <ImagePopup
-              name="show-cards"
-              card={selectedCard}
-              onClose={closeAllPopups}
-            />
+        <Header
+          isLoggedIn={isLoggedIn}
+          email={newUserInfo.userEmail}
+          onSignOut={handleSignOut}
+        />
+        <Switch>
+          <ProtectedRoute
+            exact
+            path="/"
+            component={Main}
+            isLoggedIn={isLoggedIn}
+            onEditAvatar={handleEditAvatarClick}
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
+            onCardClick={handleCardClick}
+            cards={cards}
+            onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
+          />
+          <Route path="/sign-up">
+            <Register onRegister={handleRegister} />
           </Route>
           <Route path="/sign-in">
-            <Login />
+            <Login onLogin={handleLogin} />
           </Route>
-          <Route path="/sign-up">
-            <Register onAddUser={handleAddUserSubmit} />
+
+          <Route>
+            <Redirect to={!isLoggedIn ? "/sign-in" : "/"} />
           </Route>
-          <Route exact path="/">
-            //Временное решение
-            {loggedIn ? <Redirect to="/regOk" /> : <Redirect to="/sign-up" />}
-          </Route>
-        </div>
+        </Switch>
+
+        <EditProfilePopup
+          isOpen={isEditProfilePopupOpen}
+          onClose={closeAllPopups}
+          onUpdateUser={handleUpdateUser}
+          buttonSubmitText={submitTextProfilePopup}
+        />
+
+        <AddPlacePopup
+          isOpen={isAddPlacePopupOpen}
+          onClose={closeAllPopups}
+          onAddPlace={handleAddPlaceSubmit}
+          buttonSubmitText={submitTextAddPlacesPopup}
+        />
+
+        <EditAvatarPopup
+          isOpen={isEditAvatarPopupOpen}
+          onClose={closeAllPopups}
+          onUpdateAvatar={handleUpdateAvatar}
+        />
+        <Footer />
+        <ImagePopup
+          name="show-cards"
+          card={selectedCard}
+          onClose={closeAllPopups}
+        />
       </CurrentUserContext.Provider>
-    </Switch>
+    </div>
   );
 }
 

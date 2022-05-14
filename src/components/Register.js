@@ -1,22 +1,26 @@
-import React from "react";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
-//sign-up
-function Register({ onAddUser }) {
-  const [email, setEmail] = React.useState("");
- const [password, setPassword] = React.useState("");
+//sign-in
+function Register({ onRegister }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  React.useEffect(() => {
-    setEmail("");
-    setPassword("");
-  }, []);
+  // useEffect(() => {
+  //   setEmail("");
+  //   setPassword("");
+  // }, []);
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log('hello')
-    onAddUser({
-      email,
-      password,
-    });
+    if (onRegister && email && password) {
+      onRegister({
+        password,
+        email,
+      });
+    }
+
+    //console.log(email, password);
   }
 
   function handleChangeEmail(e) {
@@ -32,7 +36,6 @@ function Register({ onAddUser }) {
       <div className="register__content">
         <p className="register__title">Регистрация</p>
         <form className="register__form" type="submit" onSubmit={handleSubmit}>
-          
           <input
             className="register__form-field"
             type="email"
@@ -53,7 +56,10 @@ function Register({ onAddUser }) {
         </form>
         <span className="register__already">
           Уже зарегистрированы?
-          <button className="register__log-in button-hover">Войти</button>
+          <Link to="/sign-in" className="register__log-in button-hover">
+            {" "}
+            Войти
+          </Link>
         </span>
       </div>
     </div>
