@@ -3,7 +3,7 @@ import logo from "../images/logo.svg";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router";
 
-function Header({ email, handleSignOut}) {
+function Header({ email, onSignOut }) {
   const location = useLocation();
   return (
     <header className="header">
@@ -12,10 +12,21 @@ function Header({ email, handleSignOut}) {
         <div className="heaqer__contant">
           <p className="header__user-email">{email}</p>
           <Link
-            to={location.pathname === "/sign-up" ? "/sign-in" : location.pathname === "/sign-in" ? "/sign-up" : "/sign-in"}
+            to={
+              location.pathname === "/sign-up"
+                ? "/sign-in"
+                : location.pathname === "/sign-in"
+                ? "/sign-up"
+                : "/sign-in"
+            }
             className="header__button button-hover"
-            onClick={location.pathname === "/" ? handleSignOut : () => {}}>
-            {location.pathname === "/sign-up" ? "Войти" : location.pathname === "/sign-in" ? "Регистрация" : "Выйти"}
+            onClick={location.pathname === "/" ? onSignOut : () => {}}
+          >
+            {location.pathname === "/sign-up"
+              ? "Войти"
+              : location.pathname === "/sign-in"
+              ? "Регистрация"
+              : "Выйти"}
           </Link>
         </div>
       </div>

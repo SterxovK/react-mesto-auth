@@ -77,3 +77,10 @@
 @import url(../src/blocks/infoTooltip/infoTooltip.css);
 @import url(../src/blocks/infoTooltip/__imge/infoTooltip__image.css);
 @import url(../src/blocks/infoTooltip/__text/infoTooltip__text.css);
+
+@import url(../src/blocks/register/__content/register__content.css);
+@import url(../src/blocks/register/__title/register__title.css);
+@import url(../src/blocks/register/__form-field/register__form-field.css);
+@import url(../src/blocks/register/__button/register__button.css);
+@import url(../src/blocks/register/__already/register__already.css);
+@import url(../src/blocks/register/__log-in/register__log-in.css);

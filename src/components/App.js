@@ -22,10 +22,8 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [cards, setCards] = useState([]);
-  const [submitTextProfilePopup, setSubmitTextProfilePopup] =
-    useState("Сохранить");
-  const [submitTextAddPlacesPopup, setSubmitTextAddPlacesPopup] =
-    useState("Сохранить");
+  const [submitTextProfilePopup, setSubmitTextProfilePopup] = useState("Сохранить");
+  const [submitTextAddPlacesPopup, setSubmitTextAddPlacesPopup] = useState("Сохранить");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const history = useHistory();
   const [isInfoTooltip, setIsInfoTooltip] = useState(false);
@@ -43,29 +41,27 @@ function App() {
         .catch((err) => {
           console.log(err);
         });
-    } 
+    }
   }, [isLoggedIn]);
 
   useEffect(() => {
     tokenCheck();
   }, []);
 
-  function tokenCheck() {
+  async function tokenCheck() {
     if (localStorage.getItem("jwt")) {
       const jwt = localStorage.getItem("jwt");
       if (jwt) {
-        auth
-          .validityToken(jwt)
-          .then((res) => {
-            if (res) {
-              setUserEmail(res.data.email);
-            }
-            setIsLoggedIn(true);
-            history.push("/");
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        const res = await auth.validityToken(jwt);
+        try {
+          if (res) {
+            setUserEmail(res.data.email);
+          }
+          setIsLoggedIn(true);
+          history.push("/");
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
   }
@@ -152,48 +148,40 @@ function App() {
     }
   }
 
-  function handleRegister(email, password) {
-    console.log(password, email);
-    auth
-      .register(password, email)
-      .then((res) => {
-        setIsInfoTooltip(true);
-        if (res) {
-          setMessage(true);
-          history.push("/sign-in");
-        }
-      })
-      .catch(() => {
-        setMessage(false);
-        setIsInfoTooltip(true);
-      });
+  async function handleRegister(email, password) {
+    const data = await auth.register(password, email);
+    try {
+      setIsInfoTooltip(true);
+      if (data) {
+        setMessage(true);
+        history.push("/sign-in");
+      }
+    } catch (error) {
+      setMessage(false);
+      setIsInfoTooltip(true);
+    }
   }
 
-  function handleLogin(email, password) {
-    console.log(password, email);
-    auth
-      .login(password, email)
-      .then((res) => {
-        if (res) {
-          //console.log(res)
-          setIsLoggedIn(true);
-          setUserEmail(email);
-          history.push("/");
-          localStorage.setItem("jwt", res.token);
-        }
-      })
-      .catch(() => {
-        setMessage(false);
-        setIsInfoTooltip(true);
-      });
+  async function handleLogin(email, password) {
+    const data =  await auth.login(password, email);
+    try {
+      if (data) {
+        setIsLoggedIn(true);
+        setUserEmail(email);
+        history.push("/");
+        localStorage.setItem("jwt", data.token);
+      }
+    } catch (error) {
+      setMessage(false);
+      setIsInfoTooltip(true);
+    }
   }
 
   function handleSignOut() {
     localStorage.removeItem("jwt");
-    console.log('выйти')
     history.push("/sign-in");
     setIsLoggedIn(false);
-    //console.log("sd");
+    setUserEmail("");
   }
 
   return (
