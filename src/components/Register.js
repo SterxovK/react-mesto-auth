@@ -1,53 +1,40 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
+import { React, useState } from "react";
 
-//sign-in
-function Register({ onRegister }) {
+const Register = ({ onRegister }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // useEffect(() => {
-  //   setEmail("");
-  //   setPassword("");
-  // }, []);
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    if (onRegister && email && password) {
-      onRegister({
-        password,
-        email,
-      });
-    }
-
-    //console.log(email, password);
+  function handleEmailChange(evt) {
+    setEmail(evt.target.value);
   }
 
-  function handleChangeEmail(e) {
-    setEmail(e.target.value);
+  function handlePasswordChange(evt) {
+    setPassword(evt.target.value);
   }
 
-  function handleChangePassword(e) {
-    setPassword(e.target.value);
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    onRegister(email, password);
   }
 
   return (
     <div className="register">
       <div className="register__content">
-        <p className="register__title">Регистрация</p>
+        <h3 className="register__title">Регистрация</h3>
         <form className="register__form" type="submit" onSubmit={handleSubmit}>
           <input
             className="register__form-field"
             type="email"
             placeholder="Email"
-            onChange={handleChangeEmail}
+            onChange={handleEmailChange}
             required
           />
           <input
             className="register__form-field"
             type="password"
             placeholder="Пароль"
-            onChange={handleChangePassword}
+            onChange={handlePasswordChange}
             required
           />
           <button className="register__button button-hover">
@@ -64,6 +51,6 @@ function Register({ onRegister }) {
       </div>
     </div>
   );
-}
+};
 
-export default Register;
+export default withRouter(Register);

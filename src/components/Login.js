@@ -1,29 +1,20 @@
-import React from "react";
-//sign-up
+import { useState } from "react";
 
-function Login({onLogin}) {
- const [email, setEmail] = React.useState("");
- const [password, setPassword] = React.useState("");
+function Login({ onLogin }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  React.useEffect(() => {
-    setEmail("");
-    setPassword("");
-  }, []);
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    onLogin({
-      email,
-      password,
-    });
+  function handleEmailChange(evt) {
+    setEmail(evt.target.value);
   }
 
-  function handleChangeEmail(e) {
-    setEmail(e.target.value);
+  function handlePasswordChange(evt) {
+    setPassword(evt.target.value);
   }
 
-  function handleChangePassword(e) {
-    setPassword(e.target.value);
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    onLogin(email, password);
   }
 
   return (
@@ -31,26 +22,22 @@ function Login({onLogin}) {
       <div className="register__content">
         <p className="register__title">Вход</p>
         <form className="register__form" type="submit" onSubmit={handleSubmit}>
-          
           <input
             className="register__form-field"
             type="email"
             placeholder="Email"
-            onChange={handleChangeEmail}
+            onChange={handleEmailChange}
             required
           />
           <input
             className="register__form-field"
             type="password"
             placeholder="Пароль"
-            onChange={handleChangePassword}
+            onChange={handlePasswordChange}
             required
           />
-          <button className="register__button button-hover">
-            Войти
-          </button>
+          <button className="register__button button-hover">Войти</button>
         </form>
-        
       </div>
     </div>
   );

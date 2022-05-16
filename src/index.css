@@ -70,4 +70,10 @@
 @import url(../src/blocks/profile/__avatar-edit-button/profile__avatar-edit-button.css);
 @import url(../src/blocks/popup/_type/popup_type_edit-avatar.css);
 
-@import url(../src/blocks/register/register.css)
+@import url(../src/blocks/popup/_type/popup_type_info-toltip.css);
+
+@import url(../src/blocks/register/register.css);
+
+@import url(../src/blocks/infoTooltip/infoTooltip.css);
+@import url(../src/blocks/infoTooltip/__imge/infoTooltip__image.css);
+@import url(../src/blocks/infoTooltip/__text/infoTooltip__text.css);
