@@ -5,6 +5,9 @@ import { useLocation } from "react-router";
 
 function Header({ email, onSignOut }) {
   const location = useLocation();
+  const isLocationSignIn = location.pathname === "/sign-in";
+  const isLocationMain = location.pathname === "/";
+  const isLocationSignUp = location.pathname === "/sign-up";
   return (
     <header className="header">
       <div className="header__container">
@@ -13,20 +16,14 @@ function Header({ email, onSignOut }) {
           <p className="header__user-email">{email}</p>
           <Link
             to={
-              location.pathname === "/sign-up"
-                ? "/sign-in"
-                : location.pathname === "/sign-in"
-                ? "/sign-up"
-                : "/sign-in"
+              isLocationSignUp ? "/sign-in" : isLocationSignIn ? "/sign-up" : "/sign-in"
             }
             className="header__button button-hover"
-            onClick={location.pathname === "/" ? onSignOut : () => {}}
+            onClick={isLocationMain ? onSignOut : () => {}}
           >
-            {location.pathname === "/sign-up"
-              ? "Войти"
-              : location.pathname === "/sign-in"
-              ? "Регистрация"
-              : "Выйти"}
+            {
+            isLocationSignUp ? "Войти" : isLocationSignIn ? "Регистрация" : "Выйти"
+            }
           </Link>
         </div>
       </div>
