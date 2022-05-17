@@ -22,8 +22,10 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [cards, setCards] = useState([]);
-  const [submitTextProfilePopup, setSubmitTextProfilePopup] = useState("Сохранить");
-  const [submitTextAddPlacesPopup, setSubmitTextAddPlacesPopup] = useState("Сохранить");
+  const [submitTextProfilePopup, setSubmitTextProfilePopup] =
+    useState("Сохранить");
+  const [submitTextAddPlacesPopup, setSubmitTextAddPlacesPopup] =
+    useState("Сохранить");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const history = useHistory();
   const [isInfoTooltip, setIsInfoTooltip] = useState(false);
@@ -49,19 +51,17 @@ function App() {
   }, []);
 
   async function tokenCheck() {
-    if (localStorage.getItem("jwt")) {
-      const jwt = localStorage.getItem("jwt");
-      if (jwt) {
-        const res = await auth.validityToken(jwt);
-        try {
-          if (res) {
-            setUserEmail(res.data.email);
-          }
-          setIsLoggedIn(true);
-          history.push("/");
-        } catch (error) {
-          console.log(error);
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      const res = await auth.validityToken(jwt);
+      try {
+        if (res) {
+          setUserEmail(res.data.email);
         }
+        setIsLoggedIn(true);
+        history.push("/");
+      } catch (error) {
+        console.log(error);
       }
     }
   }
@@ -129,8 +129,8 @@ function App() {
     }
   }
   async function handleCardDelete(card) {
-    await api.deleteCard(card._id);
     try {
+      await api.deleteCard(card._id);
       setCards((state) => state.filter((c) => c._id !== card._id));
     } catch (error) {
       console.log(error);
@@ -139,8 +139,8 @@ function App() {
 
   async function handleAddPlaceSubmit(data) {
     setSubmitTextAddPlacesPopup("уже почти...");
-    const newCard = await api.setNewCards(data);
     try {
+      const newCard = await api.setNewCards(data);
       setCards([newCard, ...cards]);
       closeAllPopups();
     } catch (error) {
@@ -149,8 +149,8 @@ function App() {
   }
 
   async function handleRegister(email, password) {
-    const data = await auth.register(password, email);
     try {
+      const data = await auth.register(password, email);
       setIsInfoTooltip(true);
       if (data) {
         setMessage(true);
@@ -159,12 +159,13 @@ function App() {
     } catch (error) {
       setMessage(false);
       setIsInfoTooltip(true);
+      console.log(error);
     }
   }
 
   async function handleLogin(email, password) {
-    const data =  await auth.login(password, email);
     try {
+      const data = await auth.login(password, email);
       if (data) {
         setIsLoggedIn(true);
         setUserEmail(email);
