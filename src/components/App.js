@@ -51,21 +51,20 @@ function App() {
   }, []);
 
   async function tokenCheck() {
-      try {
-        const jwt = localStorage.getItem("jwt");
-        if (jwt) {
-      const res = await auth.validityToken(jwt);
+    try {
+      const jwt = localStorage.getItem("jwt");
+      if (jwt) {
+        const res = await auth.validityToken(jwt);
         if (res) {
           setUserEmail(res.data.email);
         }
         setIsLoggedIn(true);
         history.push("/");
-        }
-      } catch (error) {
-        console.log(error);
       }
+    } catch (error) {
+      console.log(error);
     }
-  
+  }
 
   const handleEditProfileClick = () => {
     setSubmitTextProfilePopup("Сохранить");
