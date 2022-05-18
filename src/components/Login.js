@@ -1,20 +1,20 @@
 import { useState } from "react";
 
 function Login({ onLogin }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  function handleEmailChange(evt) {
-    setEmail(evt.target.value);
-  }
+  const [values, setValues] = useState({});
 
-  function handlePasswordChange(evt) {
-    setPassword(evt.target.value);
-  }
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setValues((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    onLogin(email, password);
+    onLogin(values);
   }
 
   return (
@@ -23,20 +23,27 @@ function Login({ onLogin }) {
         <p className="register__title">Вход</p>
         <form className="register__form" type="submit" onSubmit={handleSubmit}>
           <input
+            name="email"
             className="register__form-field"
             type="email"
             placeholder="Email"
-            onChange={handleEmailChange}
+            onChange={handleChange}
             required
           />
           <input
+            name="password"
             className="register__form-field"
             type="password"
             placeholder="Пароль"
-            onChange={handlePasswordChange}
+            onChange={handleChange}
             required
           />
-          <button className="register__button button-hover">Войти</button>
+          <button
+            className="register__button button-hover"
+            //disabled={!values.formValid}
+          >
+            Войти
+          </button>
         </form>
       </div>
     </div>

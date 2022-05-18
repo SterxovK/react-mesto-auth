@@ -148,7 +148,8 @@ function App() {
     }
   }
 
-  async function handleRegister(email, password) {
+  async function handleRegister(values) {
+    const { password, email } = values;
     try {
       const data = await auth.register(password, email);
       setIsInfoTooltip(true);
@@ -163,7 +164,8 @@ function App() {
     }
   }
 
-  async function handleLogin(email, password) {
+  async function handleLogin(values) {
+    const { password, email } = values;
     try {
       const data = await auth.login(password, email);
       if (data) {
